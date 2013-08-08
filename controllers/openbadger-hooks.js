@@ -43,15 +43,13 @@ function handleIssuedClaim(email, code, callback) {
           guardians.find({ where: { email: email} }).success(function(guardian) {
             if (guardian !== null) {
               // email matched a guardian.  unknown child.
-              mandrill.send('<13 badge claim', { claimUrl: claimUrl, badgeName: badgeData.badge.name }, email, function(err) {
-                return callback(err);
-              });
+              mandrill.send('<13 badge claim', { claimUrl: claimUrl, badgeName: badgeData.badge.name }, email);
+              return callback();
             }
             else {
               // email did not match any existing guardian or learner.
-              mandrill.send('unknown badge claim', { claimUrl: claimUrl, badgeName: badgeData.badge.name }, email, function(err) {
-                return callback(err);
-              });
+              mandrill.send('unknown badge claim', { claimUrl: claimUrl, badgeName: badgeData.badge.name }, email);
+              return callback();
             }
           });
         }
@@ -61,9 +59,8 @@ function handleIssuedClaim(email, code, callback) {
               return callback(err);
 
             // email matched an underage learner.  Email the guardian
-            mandrill.send('<13 badge claim with name', { claimUrl: claimUrl, earnerName: learner.username, badgeName: badgeData.badge.name }, guardian.email, function(err) {
-              return callback(err)
-            });
+            mandrill.send('<13 badge claim with name', { claimUrl: claimUrl, earnerName: learner.username, badgeName: badgeData.badge.name }, guardian.email);
+            return callback();
           });
         }
       });
